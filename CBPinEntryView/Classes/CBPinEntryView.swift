@@ -21,6 +21,18 @@ public protocol CBPinEntryViewDelegate: class {
         }
     }
     
+    @IBInspectable open var itemWidth: CGFloat = CBPinEntryViewDefaults.itemWidth {
+        didSet {
+            commonInit()
+        }
+    }
+
+    @IBInspectable open var itemHeight: CGFloat = CBPinEntryViewDefaults.itemHeight {
+        didSet {
+            commonInit()
+        }
+    }
+    
     @IBInspectable open var spacing: CGFloat = CBPinEntryViewDefaults.spacing {
         didSet {
             commonInit()
@@ -29,7 +41,7 @@ public protocol CBPinEntryViewDelegate: class {
 
     @IBInspectable open var entryCornerRadius: CGFloat = CBPinEntryViewDefaults.entryCornerRadius {
         didSet {
-            if oldValue != entryCornerRadius {
+            if (oldValue != entryCornerRadius) {
                 updateButtonStyles()
             }
         }
@@ -37,7 +49,7 @@ public protocol CBPinEntryViewDelegate: class {
 
     @IBInspectable open var entryBorderWidth: CGFloat = CBPinEntryViewDefaults.entryBorderWidth {
         didSet {
-            if oldValue != entryBorderWidth {
+            if (oldValue != entryBorderWidth) {
                 updateButtonStyles()
             }
         }
@@ -45,7 +57,7 @@ public protocol CBPinEntryViewDelegate: class {
 
     @IBInspectable open var entryDefaultBorderColour: UIColor = CBPinEntryViewDefaults.entryDefaultBorderColour {
         didSet {
-            if oldValue != entryDefaultBorderColour {
+            if (oldValue != entryDefaultBorderColour) {
                 updateButtonStyles()
             }
         }
@@ -53,7 +65,7 @@ public protocol CBPinEntryViewDelegate: class {
 
     @IBInspectable open var entryBorderColour: UIColor = CBPinEntryViewDefaults.entryBorderColour {
         didSet {
-            if oldValue != entryBorderColour {
+            if (oldValue != entryBorderColour) {
                 updateButtonStyles()
             }
         }
@@ -61,7 +73,7 @@ public protocol CBPinEntryViewDelegate: class {
 
     @IBInspectable open var entryEditingBackgroundColour: UIColor = CBPinEntryViewDefaults.entryEditingBackgroundColour {
         didSet {
-            if oldValue != entryEditingBackgroundColour {
+            if (oldValue != entryEditingBackgroundColour) {
                 updateButtonStyles()
             }
         }
@@ -71,7 +83,7 @@ public protocol CBPinEntryViewDelegate: class {
 
     @IBInspectable open var entryBackgroundColour: UIColor = CBPinEntryViewDefaults.entryBackgroundColour {
         didSet {
-            if oldValue != entryBackgroundColour {
+            if (oldValue != entryBackgroundColour) {
                 updateButtonStyles()
             }
         }
@@ -79,7 +91,7 @@ public protocol CBPinEntryViewDelegate: class {
 
     @IBInspectable open var entryTextColour: UIColor = CBPinEntryViewDefaults.entryTextColour {
         didSet {
-            if oldValue != entryTextColour {
+            if (oldValue != entryTextColour) {
                 updateButtonStyles()
             }
         }
@@ -87,35 +99,103 @@ public protocol CBPinEntryViewDelegate: class {
 
     @IBInspectable open var entryFont: UIFont = CBPinEntryViewDefaults.entryFont {
         didSet {
-            if oldValue != entryFont {
+            if (oldValue != entryFont) {
                 updateButtonStyles()
             }
+        }
+    }
+
+    @IBInspectable open var isCursorVisible: Bool = CBPinEntryViewDefaults.isCursorVisible {
+        didSet {
+            setTextFieldPosition()
         }
     }
 
     @IBInspectable open var isSecure: Bool = CBPinEntryViewDefaults.isSecure
 
     @IBInspectable open var secureCharacter: String = CBPinEntryViewDefaults.secureCharacter
-
-    @IBInspectable open var keyboardType: Int = CBPinEntryViewDefaults.keyboardType
     
-    open var textContentType: UITextContentType? {
+    @IBInspectable open var keyboardType: Int = CBPinEntryViewDefaults.keyboardType {
         didSet {
-            if #available(iOS 10, *) {
-                if let contentType = textContentType {
-                    textField.textContentType = contentType
-                }
+            if (oldValue != keyboardType) {
+                updateTextFieldStyles()
             }
         }
     }
 
-    open var textFieldCapitalization: UITextAutocapitalizationType? {
+    @IBInspectable open var autocapitalizationType: Int = CBPinEntryViewDefaults.autocapitalizationType {
         didSet {
-            if let capitalization = textFieldCapitalization {
-                textField.autocapitalizationType = capitalization
+            if (oldValue != autocapitalizationType) {
+                updateTextFieldStyles()
             }
         }
     }
+    
+    private var associatedTopInset: CGFloat = 0.0
+    @IBInspectable var topInset: CGFloat {
+        get {
+            return associatedTopInset
+        }
+        
+        set {
+            associatedTopInset = newValue
+            commonInit()
+        }
+    }
+    
+    private var associatedLeftInset: CGFloat = 0.0
+    @IBInspectable var leftInset: CGFloat {
+        get {
+            return associatedLeftInset
+        }
+        
+        set {
+            associatedLeftInset = newValue
+            commonInit()
+        }
+    }
+    
+    private var associatedBottomInset: CGFloat = 0.0
+    @IBInspectable var bottomInset: CGFloat {
+        get {
+            return associatedBottomInset
+        }
+        
+        set {
+            associatedBottomInset = newValue
+            commonInit()
+        }
+    }
+    
+    private var associatedRightInset: CGFloat = 0.0
+    @IBInspectable var rightInset: CGFloat {
+        get {
+            return associatedRightInset
+        }
+        
+        set {
+            associatedRightInset = newValue
+            commonInit()
+        }
+    }
+    
+    var insets: UIEdgeInsets {
+        get {
+            return UIEdgeInsets.init(top: associatedTopInset, left: associatedLeftInset, bottom: associatedBottomInset, right: associatedRightInset)
+        }
+        
+        set {
+            associatedTopInset = newValue.top
+            associatedLeftInset = newValue.left
+            associatedBottomInset = newValue.bottom
+            associatedRightInset = newValue.right
+            commonInit()
+        }
+    }
+    
+    @IBInspectable var textFieldHeightMultiplier: CGFloat = 0.8
+    
+    @IBInspectable var cursorTopInsetInTextField: CGFloat = 1.0
 
     public enum AllowedEntryTypes: String {
         case any, numerical, alphanumeric, letters
@@ -136,6 +216,8 @@ public protocol CBPinEntryViewDelegate: class {
     open var errorMode: Bool = false
 
     fileprivate var entryButtons: [UIButton] = [UIButton]()
+        
+    private var isPastable = false
 
     public weak var delegate: CBPinEntryViewDelegate?
 
@@ -152,11 +234,107 @@ public protocol CBPinEntryViewDelegate: class {
     override open func awakeFromNib() {
         super.awakeFromNib()
 
+        makePastable()
+        
         commonInit()
     }
 
     override open func prepareForInterfaceBuilder() {
         commonInit()
+    }
+    
+    @discardableResult open override func becomeFirstResponder() -> Bool {
+        super.becomeFirstResponder()
+        
+        if let firstButton = entryButtons.first {
+            didPressCodeButton(firstButton)
+        }
+        
+        textField.becomeFirstResponder()
+        
+        return true
+    }
+    
+    @discardableResult open override func resignFirstResponder() -> Bool {
+        super.resignFirstResponder()
+        
+        setError(isError: false)
+        
+        return textField.resignFirstResponder()
+    }
+
+    public func makePastable() {
+        if (isPastable) { return }
+        
+        isUserInteractionEnabled = true
+        
+        let longGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.pasteMenu))
+        longGestureRecognizer.minimumPressDuration = 0.2
+
+        addGestureRecognizer(longGestureRecognizer)
+        
+        isPastable = true
+    }
+
+    @objc func pasteMenu(sender: Any?) {
+        var targetRect = CGRect(
+            origin: CGPoint.init(
+                x: bounds.origin.x,
+                y: bounds.origin.y
+            ),
+            size: CGSize.init(
+                width: bounds.size.width,
+                height: bounds.size.height
+            )
+        )
+        
+        targetRect.origin.y += associatedTopInset + cursorTopInsetInTextField
+        
+        targetRect.origin.y += (itemHeight - (textFieldHeightMultiplier * itemHeight)) / 2
+        
+        targetRect.origin.x = associatedLeftInset + textField.bounds.width / 2
+        
+        let textCount = (textField?.text ?? "").count
+        if (textCount < length) {
+            targetRect.size.width = itemWidth
+            var insetLeft: CGFloat = 0
+            
+            let additionalCount = textCount
+            
+            if (additionalCount > 0) {
+                let additionalCountCGFloat = CGFloat(additionalCount)
+                insetLeft += itemWidth * additionalCountCGFloat - 1
+                insetLeft += spacing * additionalCountCGFloat
+            }
+            
+            targetRect.origin.x += insetLeft
+        }
+        
+        UIMenuController.shared.setTargetRect(targetRect, in: self)
+
+        UIMenuController.shared.setMenuVisible(true, animated: true)
+    }
+
+    open override func canPaste(_ itemProviders: [NSItemProvider]) -> Bool {
+        return true
+    }
+
+    override public func paste(_ sender: Any?) {
+        guard let textField = self.textField else {
+            return
+        }
+        
+        if let string = UIPasteboard.general.string, !string.isEmpty {
+            let _ = self.textField(textField, shouldChangeCharactersIn: NSRange.init(location: 0, length: string.count), replacementString: string)
+        }
+
+        UIMenuController.shared.setMenuVisible(false, animated: true)
+        
+        textField.becomeFirstResponder()
+    }
+
+    override public func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        return (action == #selector(paste(_:)))
     }
 
 
@@ -165,37 +343,192 @@ public protocol CBPinEntryViewDelegate: class {
             view.removeFromSuperview()
         }
         
+        stackView = nil
+        textField = nil
+        entryButtons.removeAll()
+        
+        setupView()
         setupStackView()
         setupTextField()
 
         createButtons()
     }
+    
+    private func setupView() {
+        ForConstraint: for constraint in self.constraints {
+            if (constraint.firstAttribute == .width ||
+                constraint.secondAttribute == .width) {
+                constraint.isActive = false
+                self.removeConstraint(constraint)
+                break ForConstraint
+            }
+        }
+        
+        ForConstraint: for constraint in self.constraints {
+            if (constraint.firstAttribute == .height ||
+                constraint.secondAttribute == .height) {
+                constraint.isActive = false
+                self.removeConstraint(constraint)
+                break ForConstraint
+            }
+        }
+        
+        let itemsHeight: CGFloat = associatedTopInset + associatedBottomInset + itemHeight
+        
+        self.heightAnchor.constraint(equalToConstant: itemsHeight).isActive = true
+        
+        var itemsWidth: CGFloat = associatedLeftInset + associatedRightInset
+        
+        if (length > 0) {
+            let lengthCGFloat = CGFloat(length)
+            
+            itemsWidth += itemWidth * lengthCGFloat
+            itemsWidth += spacing * (lengthCGFloat - 1)
+        }
+        
+        self.widthAnchor.constraint(equalToConstant: itemsWidth).isActive = true
+    }
 
     private func setupStackView() {
-        stackView = UIStackView(frame: bounds)
-        stackView!.alignment = .fill
-        stackView!.axis = .horizontal
-        stackView!.distribution = .fillEqually
-        stackView!.spacing = spacing
-        stackView!.translatesAutoresizingMaskIntoConstraints = false
+        let stackView = UIStackView(frame: bounds)
+        stackView.alignment = .fill
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = spacing
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        self.addSubview(stackView!)
+        self.addSubview(stackView)
         
-        stackView!.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0).isActive = true
-        stackView!.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0).isActive = true
-        stackView!.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
-        stackView!.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: associatedLeftInset).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -associatedRightInset).isActive = true
+        stackView.topAnchor.constraint(equalTo: topAnchor, constant: associatedTopInset).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -associatedBottomInset).isActive = true
+        
+        self.stackView = stackView
     }
 
     private func setupTextField() {
-        textField = UITextField(frame: bounds)
+        let textField = CBPinEntryViewTextField(frame: bounds)
+        textField.responderStandardEditActions = self
         textField.delegate = self
-        textField.keyboardType = UIKeyboardType(rawValue: keyboardType) ?? .numberPad
         textField.addTarget(self, action: #selector(textfieldChanged(_:)), for: .editingChanged)
-
+        
         self.addSubview(textField)
 
         textField.isHidden = true
+        
+        self.textField = textField
+        
+        updateTextFieldStyles()
+        
+        setTextFieldPosition()
+    }
+    
+    func updateTextFieldStyles() {
+        guard let textField = self.textField else { return }
+        
+        textField.autocorrectionType = .no
+        textField.keyboardType = UIKeyboardType(rawValue: keyboardType) ?? UIKeyboardType(rawValue: CBPinEntryViewDefaults.keyboardType)!
+        textField.autocapitalizationType = UITextAutocapitalizationType.init(rawValue: autocapitalizationType) ?? UITextAutocapitalizationType.init(rawValue: CBPinEntryViewDefaults.autocapitalizationType)!
+    }
+    
+    private func setTextFieldPosition() {
+        guard let textField = self.textField else { return }
+        
+        textField.textColor = .clear
+        
+        ForConstraint: for constraint in textField.constraints {
+            if (constraint.firstAttribute == .width ||
+                constraint.secondAttribute == .width) {
+                constraint.isActive = false
+                textField.removeConstraint(constraint)
+                break ForConstraint
+            }
+        }
+        
+        ForConstraint: for constraint in self.constraints {
+            if ((constraint.firstAttribute == .top && (constraint.firstItem as? UIView) == textField) ||
+                (constraint.secondAttribute == .top && (constraint.secondItem as? UIView) == textField)) {
+                constraint.isActive = false
+                self.removeConstraint(constraint)
+                break ForConstraint
+            }
+        }
+        
+        ForConstraint: for constraint in textField.constraints {
+            if (constraint.firstAttribute == .height ||
+                constraint.secondAttribute == .height) {
+                constraint.isActive = false
+                self.removeConstraint(constraint)
+                break ForConstraint
+            }
+        }
+        
+        textField.translatesAutoresizingMaskIntoConstraints = !isCursorVisible
+        
+        if (!isCursorVisible) {
+            textField.isHidden = true
+            
+            return
+        }
+        
+        if (textField.superview == nil) { return }
+        
+        let height = itemHeight * textFieldHeightMultiplier
+        
+        let topInset = associatedTopInset + cursorTopInsetInTextField + ((itemHeight - height) / 2)
+        
+        textField.widthAnchor.constraint(equalToConstant: 2).isActive = true
+        textField.topAnchor.constraint(equalTo: self.topAnchor, constant: topInset).isActive = true
+        textField.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
+
+    private func resetTextFieldPosition(button: UIButton, stringLength: Int) {
+        guard let textField = self.textField else { return }
+        
+        ForConstraint: for constraint in self.constraints {
+            if ((constraint.firstAttribute == .leading && (constraint.firstItem as? UIView) == textField) ||
+                (constraint.secondAttribute == .leading && (constraint.secondItem as? UIView) == textField)) {
+                constraint.isActive = false
+                self.removeConstraint(constraint)
+                break ForConstraint
+            }
+        }
+        
+        textField.translatesAutoresizingMaskIntoConstraints = !isCursorVisible
+        
+        if (!isCursorVisible) {
+            textField.isHidden = true
+            
+            return
+        }
+        
+        if (textField.superview == nil) { return }
+        
+        ForI: for i in 0 ..< entryButtons.count {
+            if (entryButtons[i] == button) {
+                let positionCGFloat = CGFloat(i)
+                
+                let lengthCGFloat = CGFloat(length)
+
+                let buttonBoundsWidth = button.bounds.width
+                
+                var constantLeading: CGFloat = associatedLeftInset + (buttonBoundsWidth / 2) - (textField.bounds.width / lengthCGFloat)
+                
+                if (i > 0) {
+                    constantLeading += (buttonBoundsWidth + spacing) * positionCGFloat
+                }
+                
+                textField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: constantLeading).isActive = true
+                
+                textField.isHidden = false
+                
+                self.setNeedsLayout()
+                self.layoutIfNeeded()
+                
+                break ForI
+            }
+        }
     }
 
     private func createButtons() {
@@ -206,8 +539,7 @@ public protocol CBPinEntryViewDelegate: class {
             button.titleLabel?.font = entryFont
             button.layer.cornerRadius = entryCornerRadius
 
-            // The text could either be underlined or have a border
-            if isUnderlined {
+            if (isUnderlined) {
                 button.addBottomBorder(thickness: entryBorderWidth, color: entryDefaultBorderColour)
             } else {
                 button.layer.borderColor = entryDefaultBorderColour.cgColor
@@ -217,8 +549,9 @@ public protocol CBPinEntryViewDelegate: class {
             button.tag = i + 1
 
             button.addTarget(self, action: #selector(didPressCodeButton(_:)), for: .touchUpInside)
-
+            
             entryButtons.append(button)
+            
             stackView?.addArrangedSubview(button)
         }
     }
@@ -236,15 +569,19 @@ public protocol CBPinEntryViewDelegate: class {
     }
 
     @objc private func didPressCodeButton(_ sender: UIButton) {
+        textField.becomeFirstResponder()
+        
         errorMode = false
         
         let entryIndex = textField.text!.count + 1
         for button in entryButtons {
             button.layer.borderColor = entryBorderColour.cgColor
-
-            if button.tag == entryIndex {
+            
+            if (button.tag == entryIndex) {
                 button.layer.borderColor = entryBorderColour.cgColor
                 button.backgroundColor = entryEditingBackgroundColour
+                
+                resetTextFieldPosition(button: button, stringLength: textField.text?.count ?? 0)
             } else {
                 button.layer.borderColor = entryDefaultBorderColour.cgColor
                 button.backgroundColor = entryBackgroundColour
@@ -253,12 +590,12 @@ public protocol CBPinEntryViewDelegate: class {
         
         textField.becomeFirstResponder()
     }
-
+    
     open func setError(isError: Bool) {
-        if isError {
+        if (isError) {
             errorMode = true
             for button in entryButtons {
-                if isUnderlined {
+                if (isUnderlined) {
                     button.viewWithTag(9999)?.backgroundColor = entryErrorBorderColour
                 } else {
                     button.layer.borderColor = entryErrorBorderColour.cgColor
@@ -268,11 +605,11 @@ public protocol CBPinEntryViewDelegate: class {
         } else {
             errorMode = false
             for button in entryButtons {
-                if isUnderlined {
+                if (isUnderlined) {
                     button.viewWithTag(9999)?.backgroundColor = entryDefaultBorderColour
                 } else {
-                button.layer.borderColor = entryDefaultBorderColour.cgColor
-                button.backgroundColor = entryBackgroundColour
+                    button.layer.borderColor = entryDefaultBorderColour.cgColor
+                    button.backgroundColor = entryBackgroundColour
                 }
             }
         }
@@ -301,31 +638,23 @@ public protocol CBPinEntryViewDelegate: class {
     open func getPinAsString() -> String {
         return textField.text!
     }
-    
-    @discardableResult open override func becomeFirstResponder() -> Bool {
-        super.becomeFirstResponder()
-        
-        if let firstButton = entryButtons.first {
-            didPressCodeButton(firstButton)
-        }
-        
-        return true
-    }
-    
-    @discardableResult open override func resignFirstResponder() -> Bool {
-        super.resignFirstResponder()
-        
-        setError(isError: false)
-        
-        return textField.resignFirstResponder()
-    }
 }
 
 extension CBPinEntryView: UITextFieldDelegate {
     @objc func textfieldChanged(_ textField: UITextField) {
-        let complete: Bool = textField.text!.count == length
-        delegate?.entryChanged(complete)
-        if complete {
+        UIMenuController.shared.setMenuVisible(false, animated: true)
+        
+        let isCompleted: Bool = textField.text!.count == length
+        delegate?.entryChanged(isCompleted)
+        
+        if (isCompleted) {
+            textField.isHidden = true
+            
+            for button in entryButtons {
+                button.layer.borderColor = entryBorderColour.cgColor
+                button.backgroundColor = entryBackgroundColour
+            }
+            
             delegate?.entryCompleted(with: textField.text)
         }
     }
@@ -337,63 +666,99 @@ extension CBPinEntryView: UITextFieldDelegate {
             button.backgroundColor = entryBackgroundColour
         }
 
-        let deleting = (range.location == textField.text!.count - 1 && range.length == 1 && string == "")
-
-        if string.count > 0 {
-            var allowed = true
+        let isDeleting = (range.location == textField.text!.count - 1 && range.length == 1 && string == "")
+        
+        if (string.count > 0) {
+            var isAllowed = true
             switch allowedEntryTypes {
-            case .numerical: allowed = Scanner(string: string).scanInt(nil)
-            case .letters: allowed = Scanner(string: string).scanCharacters(from: CharacterSet.letters, into: nil)
-            case .alphanumeric: allowed = Scanner(string: string).scanCharacters(from: CharacterSet.alphanumerics, into: nil)
+            case .numerical: isAllowed = Scanner(string: string).scanInt(nil)
+            case .letters: isAllowed = Scanner(string: string).scanCharacters(from: CharacterSet.letters, into: nil)
+            case .alphanumeric: isAllowed = Scanner(string: string).scanCharacters(from: CharacterSet.alphanumerics, into: nil)
             case .any: break
             }
 
-            if !allowed {
+            if (!isAllowed) {
+                if ((textField.text ?? "").isEmpty) {
+                    textField.isHidden = true
+                }
+                
+                becomeFirstResponder()
+                
                 return false
             }
         }
 
         let oldLength = textField.text!.count
         let replacementLength = string.count
-        let rangeLength = range.length
 
-        let newLength = oldLength - rangeLength + replacementLength
-
-        if !deleting {
+        let newLength = oldLength + replacementLength
+        
+        if (isDeleting) {
             for button in entryButtons {
-                if button.tag == newLength {
-                    button.layer.borderColor = entryDefaultBorderColour.cgColor
-                    UIView.setAnimationsEnabled(false)
-                    if !isSecure {
-                        button.setTitle(string, for: .normal)
-                    } else {
-                        button.setTitle(secureCharacter, for: .normal)
-                    }
-                    UIView.setAnimationsEnabled(true)
-                } else if button.tag == newLength + 1 {
-                    button.layer.borderColor = entryBorderColour.cgColor
-                    button.backgroundColor = entryEditingBackgroundColour
-                } else {
-                    button.layer.borderColor = entryDefaultBorderColour.cgColor
-                    button.backgroundColor = entryBackgroundColour
-                }
-            }
-        } else {
-            for button in entryButtons {
-                if button.tag == oldLength {
+                if (button.tag == oldLength) {
                     button.layer.borderColor = entryBorderColour.cgColor
                     button.backgroundColor = entryEditingBackgroundColour
                     UIView.setAnimationsEnabled(false)
                     button.setTitle("", for: .normal)
                     UIView.setAnimationsEnabled(true)
+                    
+                    resetTextFieldPosition(button: button, stringLength: newLength)
                 } else {
                     button.layer.borderColor = entryDefaultBorderColour.cgColor
                     button.backgroundColor = entryBackgroundColour
                 }
             }
+            
+            return true
         }
-
-        return newLength <= length
+        
+        if (entryButtons.count < length) {
+            becomeFirstResponder()
+            
+            return false
+        }
+        
+        if (newLength > length) {
+            becomeFirstResponder()
+            
+            return false
+        }
+        
+        textField.text = (textField.text ?? "") + string
+        
+        let newText = Array(textField.text!)
+        
+        for i in 0 ..< newLength + 1 {
+            if (i == entryButtons.count) {
+                resetTextFieldPosition(button: entryButtons[entryButtons.count - 1], stringLength: newLength)
+                
+                textField.isHidden = true
+                
+                break
+            }
+            
+            let button = entryButtons[i]
+            
+            if (button.tag == newLength + 1) {
+                button.layer.borderColor = entryBorderColour.cgColor
+                button.backgroundColor = entryEditingBackgroundColour
+                
+                resetTextFieldPosition(button: button, stringLength: newLength)
+            } else {
+                if (!isSecure) {
+                    button.setTitle(String(newText[i]), for: .normal)
+                } else {
+                    button.setTitle(secureCharacter, for: .normal)
+                }
+                
+                button.layer.borderColor = entryDefaultBorderColour.cgColor
+                button.backgroundColor = entryBackgroundColour
+            }
+        }
+        
+        textField.sendActions(for: .editingChanged)
+        
+        return false
     }
 }
 
@@ -413,5 +778,21 @@ extension UIButton {
         line.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         line.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
         line.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+}
+
+class CBPinEntryViewTextField: UITextField {
+    weak var responderStandardEditActions: UIResponderStandardEditActions? = nil
+    
+    open override func canPaste(_ itemProviders: [NSItemProvider]) -> Bool {
+        return responderStandardEditActions != nil
+    }
+    
+    override func paste(_ sender: Any?) {
+        responderStandardEditActions?.paste?(sender)
+    }
+
+    override public func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        return responderStandardEditActions != nil && (action == #selector(paste(_:)))
     }
 }

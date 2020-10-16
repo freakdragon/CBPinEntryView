@@ -13,6 +13,12 @@ struct CBPinEntryViewDefaults {
     // Default number of fields
     static let length: Int = 4
     
+    // Default item width
+    static let itemWidth: CGFloat = 35
+    
+    // Default item height
+    static let itemHeight: CGFloat = 40
+    
     // Default spacing between fields
     static let spacing: CGFloat = 10
 
@@ -43,9 +49,13 @@ struct CBPinEntryViewDefaults {
     // Default font for entry fields
     static let entryFont: UIFont = UIFont.systemFont(ofSize: 16)
 
+    static let isCursorVisible: Bool = false
+
     static let isSecure: Bool = false
 
     static let secureCharacter: String = "●"
+    
+    static let keyboardType: Int = UIKeyboardType.numberPad.rawValue
 
-    static let keyboardType: Int = 4
+    static let autocapitalizationType: Int = UITextAutocapitalizationType.none.rawValue
 }

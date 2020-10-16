@@ -12,18 +12,19 @@ import CBPinEntryView
 class ViewController: UIViewController {
     var isUnderlined = false
 
-    @IBOutlet var pinEntryView: CBPinEntryView! {
-        didSet {
-            pinEntryView.delegate = self
-        }
-    }
+    @IBOutlet var pinEntryView: CBPinEntryView!
     @IBOutlet var stringOutputLabel: UILabel!
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if #available(iOS 12, *) {
-            pinEntryView.textContentType = .oneTimeCode
-        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        pinEntryView.delegate = self
+        
+        pinEntryView.becomeFirstResponder()
     }
     
     @IBAction func pressedGetCode(_ sender: UIButton) {
