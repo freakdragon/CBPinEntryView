@@ -1,3 +1,12 @@
+# Changes in Fork:
+
+1. Added cursor visibility support.
+2. Added text paste support.
+3. Added top, bottom, left and right insets to view.
+4. Added auto width, auto height to view. Size based on count of items (length), item sizes (itemWidth, itemHeight, spacing) and view insets (topInset, bottomInset, leftInset, rightInset).
+
+P.S. Fork can have bugs. Thank you for understanding.
+
 # CBPinEntryView
 
 [![Version](https://img.shields.io/cocoapods/v/CBPinEntryView.svg?style=flat)](http://cocoapods.org/pods/CBPinEntryView)
