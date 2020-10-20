@@ -651,29 +651,10 @@ public protocol CBPinEntryViewDelegate: class {
     open func getPinAsString() -> String {
         return textField.text!
     }
-}
-
-extension CBPinEntryView: UITextFieldDelegate {
-    @objc func textfieldChanged(_ textField: UITextField) {
-        UIMenuController.shared.setMenuVisible(false, animated: true)
-        
-        let isCompleted: Bool = textField.text!.count == length
-        delegate?.entryChanged(isCompleted)
-        
-        if (isCompleted) {
-            textField.isHidden = true
-            
-            for button in entryButtons {
-                button.layer.borderColor = entryBorderColour.cgColor
-                button.backgroundColor = entryBackgroundColour
-            }
-            
-            delegate?.entryCompleted(with: textField.text)
-        }
-    }
-
-    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    
+    open func textFieldShouldChangeCharactersIn(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         errorMode = false
+        
         for button in entryButtons {
             button.layer.borderColor = entryBorderColour.cgColor
             button.backgroundColor = entryBackgroundColour
@@ -722,7 +703,11 @@ extension CBPinEntryView: UITextFieldDelegate {
                 }
             }
             
-            return true
+            textField.text = String(textField.text!.dropLast(1))
+            
+            textField.sendActions(for: .editingChanged)
+            
+            return false
         }
         
         if (entryButtons.count < length) {
@@ -772,6 +757,30 @@ extension CBPinEntryView: UITextFieldDelegate {
         textField.sendActions(for: .editingChanged)
         
         return false
+    }
+}
+
+extension CBPinEntryView: UITextFieldDelegate {
+    @objc open func textfieldChanged(_ textField: UITextField) {
+        UIMenuController.shared.setMenuVisible(false, animated: true)
+        
+        let isCompleted: Bool = textField.text!.count == length
+        delegate?.entryChanged(isCompleted)
+        
+        if (isCompleted) {
+            textField.isHidden = true
+            
+            for button in entryButtons {
+                button.layer.borderColor = entryBorderColour.cgColor
+                button.backgroundColor = entryBackgroundColour
+            }
+            
+            delegate?.entryCompleted(with: textField.text)
+        }
+    }
+
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return textFieldShouldChangeCharactersIn(textField, shouldChangeCharactersIn: range, replacementString: string)
     }
 }
 
