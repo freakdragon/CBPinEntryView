@@ -127,7 +127,7 @@ public protocol CBPinEntryViewDelegate: class {
         didSet {
             if #available(iOS 10, *) {
                 if (oldValue != textContentType) {
-                    textField.textContentType = textContentType
+                    updateTextFieldStyles()
                 }
             }
         }
