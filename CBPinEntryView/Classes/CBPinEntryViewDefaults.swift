@@ -51,6 +51,8 @@ struct CBPinEntryViewDefaults {
 
     static let isCursorVisible: Bool = false
 
+    static let isNeedToTrimBeforeChange: Bool = false
+
     static let isSecure: Bool = false
 
     static let secureCharacter: String = "●"

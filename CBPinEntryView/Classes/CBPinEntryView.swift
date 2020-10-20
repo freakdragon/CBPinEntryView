@@ -111,6 +111,8 @@ public protocol CBPinEntryViewDelegate: class {
         }
     }
 
+    @IBInspectable open var isNeedToTrimBeforeChange: Bool = CBPinEntryViewDefaults.isNeedToTrimBeforeChange
+
     @IBInspectable open var isSecure: Bool = CBPinEntryViewDefaults.isSecure
 
     @IBInspectable open var secureCharacter: String = CBPinEntryViewDefaults.secureCharacter
@@ -652,8 +654,10 @@ public protocol CBPinEntryViewDelegate: class {
         return textField.text!
     }
     
-    open func textFieldShouldChangeCharactersIn(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    open func textFieldShouldChangeCharactersIn(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString: String) -> Bool {
         errorMode = false
+        
+        let string = !isNeedToTrimBeforeChange ? replacementString : replacementString.trimmingCharacters(in: .whitespaces)
         
         for button in entryButtons {
             button.layer.borderColor = entryBorderColour.cgColor
