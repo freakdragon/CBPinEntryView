@@ -122,6 +122,16 @@ public protocol CBPinEntryViewDelegate: class {
             }
         }
     }
+    
+    open var textContentType: UITextContentType? = nil {
+        didSet {
+            if #available(iOS 10, *) {
+                if (oldValue != textContentType) {
+                    textField.textContentType = textContentType
+                }
+            }
+        }
+    }
 
     @IBInspectable open var autocapitalizationType: Int = CBPinEntryViewDefaults.autocapitalizationType {
         didSet {
@@ -430,6 +440,9 @@ public protocol CBPinEntryViewDelegate: class {
         textField.autocorrectionType = .no
         textField.keyboardType = UIKeyboardType(rawValue: keyboardType) ?? UIKeyboardType(rawValue: CBPinEntryViewDefaults.keyboardType)!
         textField.autocapitalizationType = UITextAutocapitalizationType.init(rawValue: autocapitalizationType) ?? UITextAutocapitalizationType.init(rawValue: CBPinEntryViewDefaults.autocapitalizationType)!
+        if #available(iOS 10.0, *) {
+            textField.textContentType = textContentType
+        }
     }
     
     private func setTextFieldPosition() {
