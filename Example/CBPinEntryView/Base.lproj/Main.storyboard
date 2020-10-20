@@ -37,9 +37,6 @@
                                         <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSecure" value="NO"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="keyboardType">
-                                        <integer key="value" value="0"/>
-                                    </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isCursorVisible" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="entryBorderWidth">
                                         <real key="value" value="1"/>
