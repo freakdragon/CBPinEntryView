@@ -4,6 +4,8 @@
 2. Added text paste support.
 3. Added top, bottom, left and right insets to view.
 4. Added auto width, auto height to view. Size based on count of items (length), item sizes (itemWidth, itemHeight, spacing) and view insets (topInset, bottomInset, leftInset, rightInset).
+5. Added trimming before text change property.
+6. Text field character change function is opened.
 
 P.S. Fork can have bugs. Thank you for understanding.
 
